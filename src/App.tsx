@@ -7,7 +7,7 @@ import { GlobalProvider } from './global/GlobalProvider.global';
 import SelectDay from './components/SelectDay.components';
 
 function App() {
-  const { titleAndIcon } = GlobalProvider();
+  const { titleAndIcon, setTitleAndIcon, data, setData, setDay } = GlobalProvider();
   const [open, setOpen] = useState(false);
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -19,6 +19,25 @@ function App() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSubmit = async () => {
+    // Check if any field anywhere is empty
+    const hasEmptyField = data.some((item) => !item.image || !item.title || !item.message)
+      || titleAndIcon.some((item) => !item.title || !item.iconName);
+
+    // If any field is empty, do not submit.
+    if (hasEmptyField) {
+      console.log('Submission aborted: One or more fields are empty.');
+      return;
+    }
+
+
+    // Now reset the state
+    setData([{ image: '', title: '', message: '' }]);
+    setTitleAndIcon([]);
+    setDay({ day: 'Wednesday', showNext: false });
+    forceUpdate();
   };
 
   return (
@@ -38,9 +57,12 @@ function App() {
       textAlign={"center"}
       gap={3}
     >
+      {/* top spacing */}
+      <br />
+
       {/* what day */}
       <Box>
-        <Typography>
+        <Typography gutterBottom>
           Select Day to Show:
         </Typography>
         <SelectDay />
@@ -161,7 +183,7 @@ function App() {
             fontSize: "0.9rem",
             margin: "10px",
           }}
-          onClick={() => { }}
+          onClick={handleSubmit}
         >
           Submit
         </Button>

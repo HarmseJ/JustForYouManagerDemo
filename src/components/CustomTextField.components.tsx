@@ -12,7 +12,6 @@ export default function CustomTextField(props: { location: FieldLocation }) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    console.log(value);
 
     setData((prevData) => {
       if (!prevData || !prevData[0]) {
